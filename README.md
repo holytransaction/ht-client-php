@@ -1,8 +1,10 @@
 HolyTransaction PHP client
 ==================================
 
-PHP Library for the HolyTransaction.com API
+PHP Library for the HolyTransaction.com API.
+
 This is initial release intended for use by several early adopters.
+
 If you are interested in using HolyTransaction cryptocurrency platform in your project please register at
 http://merchant.holytransaction.com/
 
@@ -34,13 +36,13 @@ Feel free to submit issues and pull requests at https://bitbucket.org/noveltylab
 
 ## Credits
 
-- Oleh Vasylenko <i.am@aleke.in>
+- Oleh Vasylenko <i.am@aldeke.in>
 
 ## License
 
 (The MIT License)
 
-Copyright (C) 2014 Oleh Vasylenko <i.am@aleke.in>
+Copyright (C) 2014 Oleh Vasylenko <i.am@aldeke.in>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
