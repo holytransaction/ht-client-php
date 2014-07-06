@@ -19,6 +19,8 @@ class Demo {
         $this->rawClient = $this->wallet->getClient();
         $this->rawClient->setDebug(true);
 
+        echo "<pre>";
+
         try {
             $isUsed = $this->rawClient->query('accounts/is_email_used', HolyTransactionClient::HTC_REQUEST_POST, array('email' => 'test@example.com'))['used'];
             var_dump($isUsed);
@@ -31,6 +33,8 @@ class Demo {
         }
 
         var_dump($this->rawClient->getDebugLog());
+        echo "</pre>";
+
     }
 
 }
