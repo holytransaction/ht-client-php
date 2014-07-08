@@ -10,15 +10,19 @@ http://merchant.holytransaction.com/
 
 ## Version
 
-0.1
+0.1.1
 
 ## Requirements
 
 - [HolyTransaction Merchant Account](http://merchant.holytransaction.com/)
+- [NaCl](https://github.com/Gasol/pecl-nacl) (for key generation)
+- [scrypt](https://github.com/DomBlack/php-scrypt) (for key generation)
 
 ## Installation
 
-Git clone. Run.
+- Install required libraries (if you will use key generation functions. Skip this step If you have your merchant apiId and apiKey)
+- git clone git@bitbucket.org:noveltylab/ht-client-php.git
+- Include in your project and use
 
 ## Usage
 
@@ -26,7 +30,11 @@ See example.php
 
 ## Changelog
 
-0.1.0
+0.1.1
+
+Included NaCl and scrypt for key generation (alpha)
+
+0.1
 
 * Initial Release
 
