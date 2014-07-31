@@ -1,58 +1,109 @@
 <?php
 
-require 'HolyTransaction/HolyTransaction.php';
-require 'HolyTransaction/HolyTransactionClient.php';
-require 'HolyTransaction/Crypto.php';
+require_once 'HolyTransaction/HolyTransaction.php';
 
-class Demo {
+$apiUserId = 0;
+$apiUserKey = '-----API_KEY-----';
 
-    private $apiUrl = 'https://staging.holytransaction.com/api/v1/';
-    private $apiId = '=================== YOUR API ID =======================';
-    private $apiKey = '=================== YOUR API KEY =======================';
-    private $debug = false;
-
-    private $wallet;
-    private $rawClient;
-
-    public function run()
-    {
-        $this->wallet = new HolyTransaction($this->apiId, $this->apiKey, $this->apiUrl);
-        $this->rawClient = $this->wallet->getClient();
-
-        if ($this->debug)
-            $this->rawClient->setDebug(true);
-
-        echo "<pre>";
-
-        try {
-            var_dump($this->rawClient->query('data/exchange_rates', HolyTransactionClient::HTC_REQUEST_GET));
-            var_dump($this->rawClient->query('accounts/' . $this->apiId, HolyTransactionClient::HTC_REQUEST_GET));
-
-            // $isUsed = $this->rawClient->query('accounts/is_email_used', HolyTransactionClient::HTC_REQUEST_POST, array('email' => 'test@example.com'));
-            // var_dump($isUsed);
-        }
-        catch (HolyTransactionAPIConnectionException $e) {
-            echo "API connection error: " . $e->getMessage();
-        }
-        catch (HolyTransactionAPIException $e) {
-            echo "API error: " . $e->getMessage();
-        }
-
-        if ($this->debug)
-            var_dump($this->rawClient->getDebugLog());
-
-        echo "</pre>";
-    }
+//$apiUserId = 0;
+//$username = '-----USERNAME-----';
+//$password = '-----PASSWORD-----';
+//$apiUserKey = \HolyTransaction\HolyTransaction::getUserApiKey($username, $password);
 
 
-    public function generateKeys() {
-        // alpha
-        $crypto = new Crypto('HT username', 'HT password');
-        var_dump($crypto->getKeys());
-    }
+$ht = new \HolyTransaction\HolyTransaction($apiUserId, $apiUserKey, $sandboxApiUrl);
 
+
+/**
+ * Exchange rates
+ */
+echo '<h1>Exchange rates</h1>';
+$exchangeRates = $ht->get('data/exchange_rates', array('show_fiat' => 1));
+var_dump($exchangeRates);
+
+
+/**
+ * Balances
+ */
+echo '<h1>Balances</h1>';
+$balances = $ht->get('balances');
+var_dump($balances);
+
+
+/**
+ * Exchange orders with pagination
+ */
+echo '<h1>Exchange orders</h1>';
+$orders = $ht->get('exchange_orders', array(
+    'per_page'  => 3,
+    'page'      => 2,
+));
+var_dump($orders);
+
+echo '<h3>Pagination</h3>';
+var_dump($ht->getPagination());
+
+
+/**
+ * Check email
+ */
+echo '<h1>Check email</h1>';
+$email_used = $ht->post('accounts/is_email_used', array('email' => 'example@mail.com'));
+var_dump($email_used);
+
+
+/**
+ * Create user
+ */
+/*
+echo '<h1>Registration</h1>';
+
+$username   = '-----USERNAME-----';
+$password   = '-----PASSWORD-----';
+$email      = 'example@email.com';
+
+$keys = $ht->getUserKeys($username, $password);
+
+echo '<h3>UserKeys from username and password</h3>';
+var_dump($keys);
+
+$encryptedKeys = array(
+    'api'   => \HolyTransaction\Crypto::signData($keys['api']['private']),
+    'key'   => \HolyTransaction\Crypto::signData($keys['key']['private']),
+);
+
+echo '<h3>Encrypted Keys</h3>';
+var_dump($encryptedKeys);
+
+$account = array(
+    'account' => array(
+        'email'                 => $email,
+        'encrypted_hmac_key'    => $encryptedKeys['api']['data'],
+        'hmac_box_public_key'   => $encryptedKeys['api']['publicKey'],
+        'hmac_box_nonce'        => $encryptedKeys['api']['nonce'],
+        'encrypted_wallet_key'  => $encryptedKeys['key']['data'],
+        'wallet_box_public_key' => $encryptedKeys['key']['publicKey'],
+        'wallet_box_nonce'      => $encryptedKeys['key']['nonce'],
+    )
+);
+
+echo '<h3>Account</h3>';
+var_dump($account);
+
+// Turn debugging on
+$ht->getClient()->setDebug(true);
+
+try {
+    $result = $ht->post('accounts', $account);
+}
+catch (\HolyTransaction\APIException $e) {
+    echo '<h3>Exception</h3>';
+    var_dump($e);
 }
 
+echo '<h3>Result</h3>';
+var_dump($result);
 
-$HTDemo = new Demo();
-$HTDemo->run();
+echo '<h3>Debug</h3>';
+var_dump($ht->getClient()->getDebugLog());
+*/

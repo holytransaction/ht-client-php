@@ -6,7 +6,7 @@ PHP Library for the HolyTransaction.com API.
 This is initial release intended for use by several early adopters.
 
 If you are interested in using HolyTransaction cryptocurrency platform in your project please register at
-http://merchant.holytransaction.com/
+[http://merchant.holytransaction.com/](http://merchant.holytransaction.com/)
 
 ## Version
 
@@ -15,12 +15,12 @@ http://merchant.holytransaction.com/
 ## Requirements
 
 - [HolyTransaction Merchant Account](http://merchant.holytransaction.com/)
-- [NaCl](https://github.com/Gasol/pecl-nacl) (for key generation)
-- [scrypt](https://github.com/DomBlack/php-scrypt) (for key generation)
+- [Libsodium](https://github.com/jedisct1/libsodium-php) (for key generation)
+- [Scrypt](https://github.com/DomBlack/php-scrypt) (for key generation)
 
 ## Installation
 
-- Install required libraries (if you will use key generation functions. Skip this step If you have your merchant apiId and apiKey)
+- Install required libraries
 - git clone git@bitbucket.org:noveltylab/ht-client-php.git
 - Include in your project and use
 
@@ -29,10 +29,6 @@ http://merchant.holytransaction.com/
 See example.php
 
 ## Changelog
-
-0.1.1
-
-Included NaCl and scrypt for key generation (alpha)
 
 0.1
 
