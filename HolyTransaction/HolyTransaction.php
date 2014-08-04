@@ -15,36 +15,38 @@ class HolyTransaction
 {
 
     private
-        $client;
+        $client,
+        $htApiUrl = 'https://api.holytransaction.com/api/v1/',
+        $walletApiUrl = 'https://holytransaction.com/api/';
 
 
-    public function __construct($apiUserId, $apiUserKey, $apiUrl=null)
+    public function __construct($apiUserId = null, $apiUserKey = null, $apiUrl=null)
     {
-        $this->client = new Client($apiUserId, $apiUserKey, $apiUrl);
+        $this->client = new Client($apiUserId, $apiUserKey, $apiUrl ? $apiUrl : $this->htApiUrl);
     }
 
 
-    public function get($apiFunction, array $params = array())
+    public function get($apiFunction, array $params = array(), $auth = true)
     {
-        return $this->client->query($apiFunction, 'GET', $params);
+        return $this->client->query($apiFunction, 'GET', $params, $auth);
     }
 
 
-    public function post($apiFunction, array $params = array())
+    public function post($apiFunction, array $params = array(), $auth = true)
     {
-        return $this->client->query($apiFunction, 'POST', $params);
+        return $this->client->query($apiFunction, 'POST', $params, $auth);
     }
 
 
-    public function patch($apiFunction, array $params = array())
+    public function patch($apiFunction, array $params = array(), $auth = true)
     {
-        return $this->client->query($apiFunction, 'PATCH', $params);
+        return $this->client->query($apiFunction, 'PATCH', $params, $auth);
     }
 
 
-    public function delete($apiFunction, array $params = array())
+    public function delete($apiFunction, array $params = array(), $auth = true)
     {
-        return $this->client->query($apiFunction, 'DELETE', $params);
+        return $this->client->query($apiFunction, 'DELETE', $params, $auth);
     }
 
 
@@ -74,13 +76,65 @@ class HolyTransaction
         if (!$headers || !isset($headers['X-Pagination']))
             return false;
 
-        return (array)json_decode($headers['X-Pagination']);
+        return json_decode($headers['X-Pagination'], true);
     }
 
 
     public function getClient()
     {
         return $this->client;
+    }
+
+
+    public function createUser($username, $password, $email)
+    {
+        $keys = $this->getUserKeys($username, $password);
+
+        $encryptedKeys = array(
+            'api'   => Crypto::signData($keys['api']['private']),
+            'key'   => Crypto::signData($keys['key']['private']),
+        );
+
+        $account = array(
+            'account' => array(
+                'email'                 => $email,
+                'encrypted_hmac_key'    => $encryptedKeys['api']['data'],
+                'hmac_box_public_key'   => $encryptedKeys['api']['publicKey'],
+                'hmac_box_nonce'        => $encryptedKeys['api']['nonce'],
+                'encrypted_wallet_key'  => $encryptedKeys['key']['data'],
+                'wallet_box_public_key' => $encryptedKeys['key']['publicKey'],
+                'wallet_box_nonce'      => $encryptedKeys['key']['nonce'],
+            )
+        );
+
+        $result = $this->post('accounts', $account);
+
+        return $result;
+    }
+
+
+    public function createWalletUser($username, $password, $email, $token)
+    {
+        $walletClient = new Client(null, null, $this->walletApiUrl);
+
+        $keys = $this->getUserKeys($username, $password, array('wallet', 'api', 'key'));
+
+        $account = array(
+            'token'     => $token,
+            'username'  => $username,
+            'email'     => $email,
+            'country'   => '',
+            'timezone'  => '',
+            'keys'      => array(
+                'wallet'    => $keys['wallet']['private'],
+                'api'       => Crypto::signData($keys['api']['private']),
+                'key'       => Crypto::signData($keys['key']['private']),
+            ),
+        );
+
+        $result = $walletClient->query('user/create', 'POST', $account, false);
+
+        return $result;
     }
 
 }

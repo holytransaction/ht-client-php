@@ -47,9 +47,9 @@ class Crypto
         $cipher = crypto_box(hex2bin($data), $nonce, crypto_box_keypair_from_secretkey_and_publickey($senderSecretkey, $reсipientPublickey));
 
         $result = array(
-            'data'      => bin2hex($cipher),
-            'nonce'     => bin2hex($nonce),
-            'publicKey' => bin2hex($senderPublickey),
+            'data'  => bin2hex($cipher),
+            'nonce' => bin2hex($nonce),
+            'senderPublicKey' => bin2hex($senderPublickey),
         );
 
         return $result;

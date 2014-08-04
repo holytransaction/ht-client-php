@@ -11,7 +11,7 @@ namespace HolyTransaction;
 class Client
 {
     private
-        $apiUrl = 'https://api.holytransaction.com/api/v1/',
+        $apiUrl,
         $apiId,
         $apiKey,
         $curl,
@@ -20,18 +20,15 @@ class Client
         $debugLog = array();
 
 
-    public function __construct($apiUserId, $apiUserKey, $apiUrl=null)
+    public function __construct($apiUserId, $apiUserKey, $apiUrl)
     {
         $this->apiId    = $apiUserId;
         $this->apiKey   = $apiUserKey;
-
-        if ($apiUrl) {
-            $this->apiUrl = $apiUrl;
-        }
+        $this->apiUrl   = $apiUrl;
     }
 
 
-    public function query($apiFunction, $requestMethod, array $params = array())
+    public function query($apiFunction, $requestMethod, array $params = array(), $auth = true)
     {
         $this->responseHeaders = '';
 
@@ -62,7 +59,7 @@ class Client
             $requestParams = json_encode($params);
         }
 
-        return $this->sendRequest($apiFunction, $requestMethod, $requestParams);
+        return $this->sendRequest($apiFunction, $requestMethod, $requestParams, $auth);
     }
 
 
@@ -97,22 +94,24 @@ class Client
     }
 
 
-    private function prepareRequestHeaders($apiFunction, $requestMethod, $content)
+    private function prepareRequestHeaders($apiFunction, $requestMethod, $content, $auth)
     {
         $headers = [
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
-            'X-Hmac-Id'     => $this->apiId,
-            'X-Hmac-Nonce'  => round(microtime(true), 3) * 1000, // 1399954063392
-            'X-Hmac-Signature' => ''
         ];
 
-        $canonicalString = implode(',', array($requestMethod, '/api/v1/' . $apiFunction, base64_encode(md5($content, true)), $headers['X-Hmac-Nonce']));
+        if ($auth) {
+            if (!$this->apiId || !$this->apiKey) {
+                throw new APIAuthorizationException('apiId and/or apiKey is not defined');
+            }
 
-        $headers['X-Hmac-Signature'] = trim(base64_encode(hash_hmac("sha1", $canonicalString, $this->apiKey, true)));
+            $headers['X-Hmac-Id']    = $this->apiId;
+            $headers['X-Hmac-Nonce'] = round(microtime(true), 3) * 1000;
 
-        $headers['X-Debug-Canonical'] = $canonicalString;
-        $headers['X-Debug-Content'] = $content;
+            $canonicalString = implode(',', array($requestMethod, '/api/v1/' . $apiFunction, base64_encode(md5($content, true)), $headers['X-Hmac-Nonce']));
+            $headers['X-Hmac-Signature'] = trim(base64_encode(hash_hmac("sha1", $canonicalString, $this->apiKey, true)));
+        }
 
 
         $curlHeaders = array();
@@ -124,11 +123,11 @@ class Client
     }
 
 
-    protected function sendRequest($apiFunction, $requestMethod = 'GET', $postContent = null)
+    protected function sendRequest($apiFunction, $requestMethod = 'GET', $postContent = null, $auth)
     {
         $this->initCurl();
 
-        $headers = $this->prepareRequestHeaders($apiFunction, $requestMethod, $postContent);
+        $headers = $this->prepareRequestHeaders($apiFunction, $requestMethod, $postContent, $auth);
 
         if ($this->debug) {
             curl_setopt($this->curl, CURLOPT_VERBOSE, 1);
