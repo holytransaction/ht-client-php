@@ -11,7 +11,7 @@ namespace HolyTransaction;
 
 class Crypto
 {
-    const HT_PUBLIC_KEY = '47ff22f86c3eb1eecfaa49c439c37f829c03b2b73d18d503202ded414de0db3b';
+    const HT_PUBLIC_KEY = 'e1038b6410244c3fc199c53cb42e23531c8b0cc2e2e2a3ccdde0924a3c483f19';
 
 
     public static function createKeys($username, $password, $service)

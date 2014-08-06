@@ -110,10 +110,16 @@ var_dump($ht->getClient()->getDebugLog());
 /**
  * Create Wallet (and HolyTransaction) User
  */
-//$username   = 'api-test-2';
-//$password   = 'api-test';
-//$email      = 'api-test-2@email.com';
-//$wallet_token = '0RW3x6cIJ73Ztg90ggCUVACE1FInW9pEfd4CaacqkHzZ18gFaIOwUIcH8ytwV4UH';
+//$username   = '-----USERNAME-----';
+//$password   = '-----PASSWORD-----';
+//$email      = '------E-MAIL------';
+//$wallet_token = '-----WALLET_TOKEN-----';
 //
-//$result = $ht->createWalletUser($username, $password, $email, $wallet_token);
-//var_dump($result);
+//try{
+//    $result = $ht->createWalletUser($username, $password, $email, $wallet_token);
+//    var_dump($result);
+//}
+//catch (\HolyTransaction\APIException $e) {
+//    echo '<h3>Error</h3>';
+//    var_dump($e);
+//}

@@ -222,7 +222,7 @@ class Client
     }
 
 
-    public function setDebug($enabled = false)
+    public function setDebug($enabled = true)
     {
         $this->debug = (bool)$enabled;
     }
