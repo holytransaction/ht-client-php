@@ -56,43 +56,15 @@ var_dump($exchangeRates);
 /*
 echo '<h1>Registration</h1>';
 
+// Turn debugging on
+$ht->getClient()->setDebug();
+
 $username   = '-----USERNAME-----';
 $password   = '-----PASSWORD-----';
 $email      = 'example@email.com';
 
-$keys = $ht->getUserKeys($username, $password);
-
-echo '<h3>UserKeys from username and password</h3>';
-var_dump($keys);
-
-$encryptedKeys = array(
-    'api'   => \HolyTransaction\Crypto::signData($keys['api']['private']),
-    'key'   => \HolyTransaction\Crypto::signData($keys['key']['private']),
-);
-
-echo '<h3>Encrypted Keys</h3>';
-var_dump($encryptedKeys);
-
-$account = array(
-    'account' => array(
-        'email'                 => $email,
-        'encrypted_hmac_key'    => $encryptedKeys['api']['data'],
-        'hmac_box_public_key'   => $encryptedKeys['api']['senderPublicKey'],
-        'hmac_box_nonce'        => $encryptedKeys['api']['nonce'],
-        'encrypted_wallet_key'  => $encryptedKeys['key']['data'],
-        'wallet_box_public_key' => $encryptedKeys['key']['senderPublicKey'],
-        'wallet_box_nonce'      => $encryptedKeys['key']['nonce'],
-    )
-);
-
-echo '<h3>Account</h3>';
-var_dump($account);
-
-// Turn debugging on
-$ht->getClient()->setDebug(true);
-
 try {
-    $result = $ht->post('accounts', $account);
+    $result = $ht->createUser($username, $password, $email);
 }
 catch (\HolyTransaction\APIException $e) {
     echo '<h3>Exception</h3>';

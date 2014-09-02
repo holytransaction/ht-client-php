@@ -99,10 +99,10 @@ class HolyTransaction
             'account' => array(
                 'email'                 => $email,
                 'encrypted_hmac_key'    => $encryptedKeys['api']['data'],
-                'hmac_box_public_key'   => $encryptedKeys['api']['publicKey'],
+                'hmac_box_public_key'   => $encryptedKeys['api']['senderPublicKey'],
                 'hmac_box_nonce'        => $encryptedKeys['api']['nonce'],
                 'encrypted_wallet_key'  => $encryptedKeys['key']['data'],
-                'wallet_box_public_key' => $encryptedKeys['key']['publicKey'],
+                'wallet_box_public_key' => $encryptedKeys['key']['senderPublicKey'],
                 'wallet_box_nonce'      => $encryptedKeys['key']['nonce'],
             )
         );
