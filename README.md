@@ -10,7 +10,7 @@ If you are interested in using HolyTransaction cryptocurrency platform in your p
 
 ## Version
 
-0.1.1
+0.1.2
 
 ## Requirements
 
@@ -35,9 +35,13 @@ var_dump($exchangeRates);
 
 ## Changelog
 
-0.1
+0.1.2
 
-* Initial Release
+* Updated example
+
+0.1.1
+
+* Initial release
 
 ## Contributing
 
