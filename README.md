@@ -10,12 +10,12 @@ If you are interested in using HolyTransaction cryptocurrency platform in your p
 
 ## Version
 
-0.1.2
+0.1.3
 
 ## Requirements
 
 - [HolyTransaction Merchant Account](http://merchant.holytransaction.com/)
-- [Libsodium](https://github.com/jedisct1/libsodium-php) (only if you will be using API for creating new accounts)
+- [Libsodium & libsodium-php](https://github.com/jedisct1/libsodium-php) (only if you will be using API for creating new accounts)
 - [Scrypt](https://github.com/DomBlack/php-scrypt) (only if you will be using API for creating new accounts)
 
 ## Installation
@@ -34,6 +34,10 @@ var_dump($exchangeRates);
 ```
 
 ## Changelog
+
+0.1.3
+
+* Correct usage of libsodium-php for key generation
 
 0.1.2
 
