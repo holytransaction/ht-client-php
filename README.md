@@ -5,8 +5,7 @@ PHP Library for the HolyTransaction.com API.
 
 This is initial release intended for use by several early adopters.
 
-If you are interested in using HolyTransaction cryptocurrency platform in your project please register at
-[http://merchant.holytransaction.com/](http://merchant.holytransaction.com/)
+If you are interested in using HolyTransaction cryptocurrency platform in your project please contact us at support@holytransaction.com
 
 ## Version
 
