@@ -39,7 +39,7 @@ class Crypto
     public static function signData($data)
     {
         $senderKeypair = Sodium::crypto_box_keypair();
-        $nonce = randombytes_buf(CRYPTO_BOX_NONCEBYTES);
+        $nonce = Sodium::randombytes_buf(CRYPTO_BOX_NONCEBYTES); //TODO: Change CRYPTO_BOX_NONCEBYTES to actual integer
 
         $senderSecretkey = Sodium::crypto_box_secretkey($senderKeypair);
         $senderPublickey = Sodium::crypto_box_publickey($senderKeypair);
